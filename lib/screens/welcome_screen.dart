@@ -10,9 +10,7 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-              color: Colors.white
-            ),
+        decoration: BoxDecoration(color: Colors.white),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -27,54 +25,72 @@ class WelcomeScreen extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              SizedBox(height: 40.0),
-              Spacer(),
+              const Spacer(),
+              // SizedBox(height: 20.0),
+              const Text(
+                "Chào mừng bạn",
+                style: TextStyle(color: Color.fromARGB(255, 15, 99, 169), fontSize: 20, fontWeight: FontWeight.w700),
+              ),
+              SizedBox(height: 10.0),
+              const Text(
+                "Đăng nhập hoặc đăng ký tài khoản",
+                style: TextStyle(color: Color.fromARGB(255, 15, 99, 169), fontSize: 15),
+              ),
+              SizedBox(height: 30.0),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      print("Di toi man hinh dang nhap");
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SignInScreen()),
-                      );
-                    },
-                    child: Text(
-                      'Đăng nhập',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Color.fromARGB(255, 255, 255, 255),
-                      backgroundColor: Color.fromARGB(255, 81, 45, 223),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                  Container(
+                    width: 400,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        print("Di toi man hinh dang nhap");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SignInScreen()),
+                        );
+                      },
+                      child: Text(
+                        'Đăng nhập',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Color.fromARGB(255, 255, 255, 255),
+                        backgroundColor: Color.fromARGB(255, 81, 45, 223),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     ),
                   ),
                   const SizedBox(height: 30),
-                  ElevatedButton(
-                    onPressed: () {
-                      print("Di toi man hinh dang ki");
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SignUpScreen()),
-                      );
-                    },
-                    child: Text(
-                      'Đăng ký',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Color.fromARGB(255, 113, 80, 245),
-                      backgroundColor: Colors.white,
-                      side: BorderSide(color: Colors.white, width: 2),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                  Container(
+                    width: 400,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        print("Di toi man hinh dang ki");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SignUpScreen()),
+                        );
+                      },
+                      child: Text(
+                        'Đăng ký',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Color.fromARGB(255, 113, 80, 245),
+                        backgroundColor: Colors.white,
+                        side: BorderSide(color: Colors.blue, width: 2),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     ),
                   ),

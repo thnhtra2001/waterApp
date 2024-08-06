@@ -53,7 +53,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         ],
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 100,
                       ),
                       const Text("Đăng nhập",
                       style: TextStyle(color: Colors.blue, fontSize: 20),
@@ -71,8 +71,10 @@ class _SignInScreenState extends State<SignInScreen> {
                         width: 400,
                         child: TextFormField(
                           validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Nhập số điện thoại';
+                            String pattern = r'^(?:[+0]9)?[0-9]{10}$';
+                            RegExp regex = RegExp(pattern);
+                            if (!regex.hasMatch(value!)) {
+                              return 'Số điện thoại không hợp lệ!';
                             }
                             return null;
                           },
@@ -93,6 +95,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               ),
                               borderRadius: BorderRadius.circular(10),
                             ),
+                            prefixIcon: const Icon(Icons.local_phone)
                           ),
                         ),
                       ),
