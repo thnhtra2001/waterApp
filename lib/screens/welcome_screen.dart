@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:waterapp/screens/signin_screen.dart';
-import 'package:waterapp/screens/signup_screen.dart';
+import 'package:waterapp/screens/signin_screen/signin_screen.dart';
+import 'package:waterapp/screens/signup_screen/signup_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key});
@@ -20,8 +20,8 @@ class WelcomeScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.asset(
                   'assets/icon.jpg',
-                  width: 110.0,
-                  height: 110.0,
+                  width: 200.0,
+                  height: 200.0,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -41,7 +41,7 @@ class WelcomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
-                    width: 400,
+                    width: 350,
                     child: ElevatedButton(
                       onPressed: () {
                         print("Di toi man hinh dang nhap");
@@ -68,7 +68,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
                   Container(
-                    width: 400,
+                    width: 350,
                     child: ElevatedButton(
                       onPressed: () {
                         print("Di toi man hinh dang ki");

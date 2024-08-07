@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:waterapp/screens/signin_screen.dart';
-
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+import 'package:waterapp/screens/otp_screen/pin_code_fields_screen.dart';
+import 'package:waterapp/screens/signup_screen/signup_screen.dart';
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({Key? key}) : super(key: key);
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  final _formSignupKey = GlobalKey<FormState>();
+class _SignInScreenState extends State<SignInScreen> {
+  final _formSigninKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: 
+      Column(
         children: [
           const Expanded(
             flex: 1,
@@ -35,7 +36,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               child: SingleChildScrollView(
                 child: Form(
-                  key: _formSignupKey,
+                  key: _formSigninKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -46,27 +47,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             borderRadius: BorderRadius.circular(8.0),
                             child: Image.asset(
                               'assets/icon.jpg',
-                              width: 110.0,
-                              height: 110.0,
+                              width: 200.0,
+                              height: 200.0,
                               fit: BoxFit.cover,
                             ),
                           ),
                         ],
                       ),
-                      // const Spacer(),
                       const SizedBox(
                         height: 100,
                       ),
-                      const Text(
-                        "Đăng ký",
-                        style: TextStyle(color: Colors.blue, fontSize: 20),
+                      const Text("Đăng nhập",
+                      style: TextStyle(color: Colors.blue, fontSize: 20),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
-                      const Text(
-                        "Nhập số điện thoại để đăng ký sử dụng dịch vụ",
-                        style: TextStyle(color: Colors.black),
+                      const Text("Nhập số điện thoại để đăng nhập sử dụng dịch vụ",
+                      style: TextStyle(color: Colors.black),
                       ),
                       const SizedBox(
                         height: 10,
@@ -108,18 +106,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       Container(
                         width: 400,
-                        height: 40,
+                        height: 55,
                         child: ElevatedButton(
                           onPressed: () {
-                            print("DANG KY");
+                            print("DANG NHAP");
                             // Navigator.push(
                             //   context,
-                            //   MaterialPageRoute(builder: (context) => SignInScreen()),
+                            //   MaterialPageRoute(builder: (context) => PinCodeScreen()),
                             // );
                           },
                           child: Text(
-                            'ĐĂNG KÝ',
-                            style: TextStyle(fontSize: 18),
+                            'ĐĂNG NHẬP',
+                            style: TextStyle(fontSize: 15),
                           ),
                           style: ElevatedButton.styleFrom(
                             foregroundColor: Color.fromARGB(255, 255, 255, 255),
@@ -132,10 +130,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                       ),
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [],
-                      ),
                       const SizedBox(
                         height: 30.0,
                       ),
@@ -143,26 +137,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            'Bạn đã có tài khoản? ',
+                            'Nếu bạn chưa có tài khoản vui lòng bấm vào ',
                             style: TextStyle(
                               color: Colors.black45,
+                              fontSize: 10
                             ),
                           ),
                           GestureDetector(
                             onTap: () {
-                              print("Di toi man dang nhap");
+                              print("Di toi man dang ky");
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (e) => const SignInScreen(),
+                                  builder: (e) => const SignUpScreen(),
                                 ),
                               );
                             },
                             child: const Text(
-                              'Đăng nhập tại đây',
+                              'Đăng ký tại đây',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.blue,
+                                fontSize: 10
                               ),
                             ),
                           ),
