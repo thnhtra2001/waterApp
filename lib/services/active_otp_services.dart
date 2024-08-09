@@ -2,29 +2,40 @@ import 'package:waterapp/model/active-otp.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../model/otp-res.dart';
+
 class ActiveOTPServices {
-  Future<ActiveOTP?> activeOtp(ActiveOTP data) async {
+  Future<OTPRes?> activeOtp(ActiveOTP data, _deviceInfo) async {
+    // final List<Map> otpRes = [];
     try {
       final url = Uri.https('sawaco-api.talking.vn', '/v1/register/active-otp');
       final response = await http.post(
         url,
         headers: {
-          'Content-Type': 'application/json', // Đặt loại nội dung
+          'Content-Type': 'application/json',
         },
-        body: json.encode(data.toJson()), // Mã hóa dữ liệu của bạn thành JSON
+        body: json.encode(data.toJson()),
       );
       if (response.statusCode == 200) {
-        // Yêu cầu thành công
-        print('Dữ liệu phản hồi: ${response.body}');
+        final responseMap = jsonDecode(response.body);
+        final otpRes = _fromJson(responseMap);
+        print('Dữ liệu phản hồi 1: ${otpRes.password}');
+        return otpRes;
       } else {
-        // Xử lý lỗi
         print('Yêu cầu thất bại với mã: ${response.statusCode}');
       }
-
-      // return data.copyWith(phone: json.decode(response.body));
     } catch (error) {
       print(error);
       return null;
     }
+    return null;
   }
 }
+
+  OTPRes _fromJson(Map<String, dynamic> json) {
+    return OTPRes(
+      password: json['password'] ?? "",
+      success: json['success'] ?? "",
+      error: json['error'] ?? "",
+    );
+  }

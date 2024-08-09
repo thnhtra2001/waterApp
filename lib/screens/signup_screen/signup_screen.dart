@@ -10,9 +10,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final Map<String, String> _data = {
-    'phone': '',
-  };
+  final Map<String, String> _data = {'phone': '', 'method': 'signup'};
   // late String _data = '0354653950';
   final _formSignupKey = GlobalKey<FormState>();
 
@@ -120,15 +118,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             // print(_data);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PolicyScreen(
-                                        data: _data,
-                                      )),
-                            );
+                            if (_formSignupKey.currentState!.validate()) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PolicyScreen(
+                                          data: _data,
+                                        )),
+                              );
+                            }
+                            _formSignupKey.currentState!.save();
                           },
-                          child: Text(
+                          child: const Text(
                             'ĐĂNG KÝ',
                             style: TextStyle(fontSize: 18),
                           ),

@@ -1,11 +1,15 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:waterapp/screens/signin_screen/signin_screen.dart';
 import 'package:waterapp/screens/signup_screen/signup_screen.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key});
 
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,12 +33,16 @@ class WelcomeScreen extends StatelessWidget {
               // SizedBox(height: 20.0),
               const Text(
                 "Chào mừng bạn",
-                style: TextStyle(color: Color.fromARGB(255, 15, 99, 169), fontSize: 20, fontWeight: FontWeight.w700),
+                style: TextStyle(
+                    color: Color.fromARGB(255, 15, 99, 169),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700),
               ),
               SizedBox(height: 10.0),
               const Text(
                 "Đăng nhập hoặc đăng ký tài khoản",
-                style: TextStyle(color: Color.fromARGB(255, 15, 99, 169), fontSize: 15),
+                style: TextStyle(
+                    color: Color.fromARGB(255, 15, 99, 169), fontSize: 15),
               ),
               SizedBox(height: 30.0),
               Column(
@@ -94,6 +102,10 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  // Text(_deviceInfo),
                 ],
               ),
               SizedBox(height: 50.0),

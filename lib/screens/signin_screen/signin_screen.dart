@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:waterapp/screens/otp_screen/pin_code_fields_screen.dart';
 import 'package:waterapp/screens/signup_screen/signup_screen.dart';
+
+import '../../model/send-otp.dart';
+import '../../services/send_otp_services.dart';
+
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
 
@@ -10,12 +14,35 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   final _formSigninKey = GlobalKey<FormState>();
+  final Map<String, String> _data = {
+    'phone': '',
+    'method': 'signin',
+    'is_confirm': ''
+  };
+  late sendOTP _otp;
+
+  Future<void> _submit() async {
+    // if (!_formSigninKey.currentState!.validate()) {
+    //   return;
+    // }
+    // _formSigninKey.currentState!.save();
+
+    // _isSubmitting.value = true;
+
+    // try {
+    await SendOTPServices().addPhone(_otp);
+    // } catch (error) {
+    //   showErrorDialog(context,
+    //       (error is HttpException) ? error.toString() : 'Có lỗi xảy ra');
+    // }
+
+    // _isSubmitting.value = false;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: 
-      Column(
+      body: Column(
         children: [
           const Expanded(
             flex: 1,
@@ -57,14 +84,16 @@ class _SignInScreenState extends State<SignInScreen> {
                       const SizedBox(
                         height: 100,
                       ),
-                      const Text("Đăng nhập",
-                      style: TextStyle(color: Colors.blue, fontSize: 20),
+                      const Text(
+                        "Đăng nhập",
+                        style: TextStyle(color: Colors.blue, fontSize: 20),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
-                      const Text("Nhập số điện thoại để đăng nhập sử dụng dịch vụ",
-                      style: TextStyle(color: Colors.black),
+                      const Text(
+                        "Nhập số điện thoại để đăng nhập sử dụng dịch vụ",
+                        style: TextStyle(color: Colors.black),
                       ),
                       const SizedBox(
                         height: 10,
@@ -81,24 +110,27 @@ class _SignInScreenState extends State<SignInScreen> {
                             return null;
                           },
                           decoration: InputDecoration(
-                            hintText: 'Nhập số điện thoại',
-                            hintStyle: const TextStyle(
-                              color: Colors.black,
-                            ),
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Colors.blue,
+                              hintText: 'Nhập số điện thoại',
+                              hintStyle: const TextStyle(
+                                color: Colors.black,
                               ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Colors.blue,
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.blue,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            prefixIcon: const Icon(Icons.local_phone)
-                          ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.blue,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              prefixIcon: const Icon(Icons.local_phone)),
+                          onChanged: (value) {
+                            _data['phone'] = value;
+                            // _data = value!;
+                          },
                         ),
                       ),
                       const SizedBox(
@@ -109,11 +141,19 @@ class _SignInScreenState extends State<SignInScreen> {
                         height: 55,
                         child: ElevatedButton(
                           onPressed: () {
+                            _otp = sendOTP(
+                                phone: _data['phone']!, is_confirm: true);
+                            _submit();
                             print("DANG NHAP");
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => PinCodeScreen()),
-                            // );
+                            if (_formSigninKey.currentState!.validate()) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        PinCodeScreen(data: _data)),
+                              );
+                            }
+                            _formSigninKey.currentState!.save();
                           },
                           child: Text(
                             'ĐĂNG NHẬP',
@@ -138,10 +178,8 @@ class _SignInScreenState extends State<SignInScreen> {
                         children: [
                           const Text(
                             'Nếu bạn chưa có tài khoản vui lòng bấm vào ',
-                            style: TextStyle(
-                              color: Colors.black45,
-                              fontSize: 10
-                            ),
+                            style:
+                                TextStyle(color: Colors.black45, fontSize: 10),
                           ),
                           GestureDetector(
                             onTap: () {
@@ -156,10 +194,9 @@ class _SignInScreenState extends State<SignInScreen> {
                             child: const Text(
                               'Đăng ký tại đây',
                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blue,
-                                fontSize: 10
-                              ),
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue,
+                                  fontSize: 10),
                             ),
                           ),
                         ],

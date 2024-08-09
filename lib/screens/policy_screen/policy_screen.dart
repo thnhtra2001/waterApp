@@ -113,11 +113,6 @@ class _PolicyScreenState extends State<PolicyScreen> {
                 onPressed: () {
                   _otp = sendOTP(phone: widget.data['phone']!, is_confirm: _isChecked);
                   _submit();
-                  print("=====================================================");
-                  print(widget.data['phone']!);
-                  print(_isChecked);
-                  print("===================================================");
-                  print("Nhap OTP");
                   Navigator.push(
                     context,
                     MaterialPageRoute(

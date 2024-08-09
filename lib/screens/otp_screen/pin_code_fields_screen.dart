@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:waterapp/model/active-otp.dart';
-import 'package:waterapp/services/active_otp_services.dart';
-
-import '../../services/send_otp_services.dart';
+import 'package:waterapp/screens/create_account/create_account.dart';
+import 'package:waterapp/screens/home_screen/home_screen.dart';
+import '../../services/active_otp_services.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import '../shared/dialog_utils.dart';
 
 class PinCodeScreen extends StatefulWidget {
   final Map<String, String> data;
@@ -15,6 +17,53 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
   late ActiveOTP _otp;
 
   List<String> values = [];
+  Map<String, String> _deviceInfo = {
+    "device_name": '',
+    "device_os": '',
+    "os_version": ''
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _getDeviceInfo();
+    });
+  }
+
+  Future<void> _getDeviceInfo() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    String deviceName;
+    String osVersion;
+    String platform;
+
+    // Lấy thông tin thiết bị một cách an toàn
+    if (Theme.of(context).platform == TargetPlatform.android) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      deviceName = androidInfo.model; // Tên thiết bị
+      osVersion = androidInfo.version.release; // Phiên bản Android
+      platform = "Android";
+    } else if (Theme.of(context).platform == TargetPlatform.iOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      deviceName = iosInfo.name; // Tên thiết bị
+      osVersion = iosInfo.utsname.release; // Phiên bản iOS
+      platform = "iOS";
+    } else {
+      deviceName = 'Unknown';
+      osVersion = 'Unknown';
+      platform = 'Unknown';
+    }
+
+    setState(() {
+      // _deviceInfo =
+      // 'Device: $deviceName\nPlatform: $platform\nOS Version: $osVersion';
+      _deviceInfo = {
+        "device_name": deviceName,
+        "device_os": platform,
+        "os_version": osVersion
+      };
+    });
+  }
 
   final List<TextEditingController> _controllers =
       List.generate(6, (index) => TextEditingController());
@@ -27,12 +76,11 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
 
     // _isSubmitting.value = true;
 
-    // try {
-    await ActiveOTPServices().activeOtp(_otp);
-    // } catch (error) {
-    //   showErrorDialog(context,
-    //       (error is HttpException) ? error.toString() : 'Có lỗi xảy ra');
-    // }
+    try {
+      await ActiveOTPServices().activeOtp(_otp, _deviceInfo);
+    } catch (error) {
+      showErrorDialog(context, error.toString());
+    }
 
     // _isSubmitting.value = false;
   }
@@ -40,12 +88,9 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
   void _onChanged(String value, int index) {
     if (value.length == 1 && index < _controllers.length) {
       values.add(value);
-      print("Mang hien tai la: $values");
       FocusScope.of(context).nextFocus(); // Chuyển đến trường tiếp theo
     } else if (value.isEmpty && index > 0) {
       values.removeLast();
-      print("Mang hien tai la: $values");
-
       FocusScope.of(context).previousFocus(); // Quay lại trường trước đó
     }
   }
@@ -204,11 +249,26 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
                         _otp = ActiveOTP(
                             phone: widget.data['phone']!, code: value2);
                         _submit();
-                        print("DANG NHAP voi ${widget.data['phone']!}");
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => SignInScreen()),
-                        // );
+                        if (widget.data['method']! == 'signin') {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => HomeScreen(),
+                            ),
+                          );
+                          // Navigator.pushAndRemoveUntil(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (context) => HomeScreen()),
+                          //   (Route<dynamic> route) =>
+                          //       false, // Xóa tất cả các trang cũ
+                          // );
+                        } else {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => CreateAccount(),
+                            ),
+                          );
+                        }
                       },
                       child: Text(
                         'XÁC THỰC OTP',
