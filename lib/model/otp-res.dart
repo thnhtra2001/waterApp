@@ -11,6 +11,10 @@ class OTPRes with ChangeNotifier {
     required this.error,
   });
 
+  bool get successOTP {
+    return success;
+  }
+
   OTPRes copyWith({
     String? password,
     bool? success,

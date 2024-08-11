@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class SendOTPServices {
-  Future<sendOTP?> addPhone(sendOTP data) async {
+  Future<void> addPhone(sendOTP data) async {
     try {
       final url = Uri.https('sawaco-api.talking.vn', '/v1/register/otp');
       final response = await http.post(

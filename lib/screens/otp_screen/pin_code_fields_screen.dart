@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:waterapp/model/active-otp.dart';
 import 'package:waterapp/screens/create_account/create_account.dart';
 import 'package:waterapp/screens/home_screen/home_screen.dart';
 import '../../services/active_otp_services.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import '../shared/dialog_utils.dart';
+import 'package:uuid/uuid.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'pin_code_fields_manager.dart';
 
 class PinCodeScreen extends StatefulWidget {
   final Map<String, String> data;
@@ -14,6 +20,7 @@ class PinCodeScreen extends StatefulWidget {
 }
 
 class _PinCodeScreenState extends State<PinCodeScreen> {
+  Map<String, String> _deviceToken = {"device-token": ''};
   late ActiveOTP _otp;
 
   List<String> values = [];
@@ -28,6 +35,30 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _getDeviceInfo();
+      _loadDeviceToken();
+    });
+  }
+
+  Future<void> _loadDeviceToken() async {
+    SharedPreferences _spref = await SharedPreferences.getInstance();
+    String? saveToken = _spref.getString("device_token");
+    if (saveToken == null) {
+      _generateToken();
+    } else {
+      setState(() {
+        _deviceToken = {"device-token": saveToken};
+      });
+    }
+  }
+
+  Future<void> _generateToken() async {
+    var uuidV4 = Uuid();
+    String token = uuidV4.v4();
+
+    SharedPreferences _spref = await SharedPreferences.getInstance();
+    await _spref.setString("device_token", token);
+    setState(() {
+      _deviceToken = {"device-token": token};
     });
   }
 
@@ -69,20 +100,20 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
       List.generate(6, (index) => TextEditingController());
 
   Future<void> _submit() async {
-    // if (!_formKey.currentState!.validate()) {
-    //   return;
-    // }
-    // _formKey.currentState!.save();
-
-    // _isSubmitting.value = true;
-
     try {
-      await ActiveOTPServices().activeOtp(_otp, _deviceInfo);
+      await context.read<PinCodeFieldsManager>().getOtpRes(_otp);
+      var code = context.read<PinCodeFieldsManager>();
+      await context
+          .read<PinCodeFieldsManager>()
+          .getToken(widget.data['phone'], code.password, _deviceInfo);
+      var token = context.read<PinCodeFieldsManager>();
+      print("token cua nguoi dung la: ");
+      print(token.access_token);
+      await ActiveOTPServices().updateDeviceToken(token.access_token, _deviceToken);
+
     } catch (error) {
       showErrorDialog(context, error.toString());
     }
-
-    // _isSubmitting.value = false;
   }
 
   void _onChanged(String value, int index) {
@@ -245,10 +276,11 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
                     width: 350,
                     height: 55,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         _otp = ActiveOTP(
                             phone: widget.data['phone']!, code: value2);
-                        _submit();
+                        await _submit();
+                        // print(_deviceToken);
                         if (widget.data['method']! == 'signin') {
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(

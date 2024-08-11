@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:waterapp/screens/policy_screen/policy_screen.dart';
 import 'package:waterapp/screens/signin_screen/signin_screen.dart';
+
+import '../otp_screen/pin_code_fields_manager.dart';
+import 'update_user.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({Key? key}) : super(key: key);
@@ -10,12 +14,13 @@ class CreateAccount extends StatefulWidget {
 }
 
 class _CreateAccountState extends State<CreateAccount> {
-  // final Map<String, String> _data = {
-  //   'phone': '',
-  //   'method':'signup'
-  // };
-  // late String _data = '0354653950';
+  final Map<String, String> _data = {'full_name': '', 'email': ''};
   final _formSignupKey = GlobalKey<FormState>();
+
+  Future<void> submit(access_token, _data) async{
+    await context.read<UpdateUserManager>().updateUser(access_token, _data);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -73,12 +78,10 @@ class _CreateAccountState extends State<CreateAccount> {
                   width: 400,
                   child: TextFormField(
                     validator: (value) {
-                      // String pattern = r'^(?:[+0]9)?[0-9]{10}$';
-                      // RegExp regex = RegExp(pattern);
-                      // if (!regex.hasMatch(value!)) {
-                      //   return 'Số điện thoại không hợp lệ!';
-                      // }
-                      // return null;
+                      if (value!.isEmpty || value.length <= 3) {
+                        return 'Tên không hợp lệ';
+                      }
+                      return null;
                     },
                     decoration: InputDecoration(
                         hintText: 'Nhập họ và tên',
@@ -99,8 +102,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         ),
                         prefixIcon: const Icon(Icons.account_circle_outlined)),
                     onChanged: (value) {
-                      // _data['phone'] = value;
-                      // _data = value!;
+                      _data['full_name'] = value;
                     },
                   ),
                 ),
@@ -111,12 +113,10 @@ class _CreateAccountState extends State<CreateAccount> {
                   width: 400,
                   child: TextFormField(
                     validator: (value) {
-                      // String pattern = r'^(?:[+0]9)?[0-9]{10}$';
-                      // RegExp regex = RegExp(pattern);
-                      // if (!regex.hasMatch(value!)) {
-                      //   return 'Số điện thoại không hợp lệ!';
-                      // }
-                      // return null;
+                      if (value!.isEmpty && value.endsWith('@')) {
+                        return 'Email không hợp lệ';
+                      }
+                      return null;
                     },
                     decoration: InputDecoration(
                         hintText: 'Địa chỉ email (nếu có)',
@@ -137,8 +137,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         ),
                         prefixIcon: const Icon(Icons.email_outlined)),
                     onChanged: (value) {
-                      // _data['phone'] = value;
-                      // _data = value!;
+                      _data['email'] = value;
                     },
                   ),
                 ),
@@ -149,17 +148,11 @@ class _CreateAccountState extends State<CreateAccount> {
                   width: 400,
                   height: 55,
                   child: ElevatedButton(
-                    onPressed: () {
-                      print("Dang ky TAI KHOAN");
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (context) => PolicyScreen(
-                      //             data: _data,
-                      //           )),
-                      // );
+                    onPressed: () async {
+                      var access_token = context.read<PinCodeFieldsManager>().access_token;
+                      await submit(access_token, _data);
                     },
-                    child: Text(
+                    child: const Text(
                       'ĐĂNG KÝ',
                       style: TextStyle(fontSize: 18),
                     ),
