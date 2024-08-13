@@ -17,10 +17,9 @@ class _CreateAccountState extends State<CreateAccount> {
   final Map<String, String> _data = {'full_name': '', 'email': ''};
   final _formSignupKey = GlobalKey<FormState>();
 
-  Future<void> submit(access_token, _data) async{
-    await context.read<UpdateUserManager>().updateUser(access_token, _data);
+  Future<void> submit(_data) async{
+    await context.read<UpdateUserManager>().updateUser(_data);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -149,8 +148,8 @@ class _CreateAccountState extends State<CreateAccount> {
                   height: 55,
                   child: ElevatedButton(
                     onPressed: () async {
-                      var access_token = context.read<PinCodeFieldsManager>().access_token;
-                      await submit(access_token, _data);
+                      // var access_token = context.read<PinCodeFieldsManager>().access_token;
+                      await submit(_data);
                     },
                     child: const Text(
                       'ĐĂNG KÝ',

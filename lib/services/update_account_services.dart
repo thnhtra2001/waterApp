@@ -2,11 +2,16 @@ import 'package:waterapp/model/send-otp.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'active_otp_services.dart';
+
 class UpdateUser {
-  Future<Map<String, dynamic>> upDateUser(data, access_token) async {
-    Map<String, dynamic> data = {};
+  Future<Map<String, dynamic>> upDateUser(data) async {
+    Map<String, dynamic> data1 = {};
     try {
-      final url = Uri.parse('https://sawaco-api.talking.vn/v1//user/update');
+      final access_token = (await ActiveOTPServices().loadSavedAuthToken())!.token;
+      print("CCCCCCCCCCCC");
+      print(access_token);
+      final url = Uri.parse('https://sawaco-api.talking.vn/v1/user/update');
       final response = await http.post(
         url,
         headers: {
@@ -16,9 +21,9 @@ class UpdateUser {
         body: jsonEncode(data), // Mã hóa dữ liệu của bạn thành JSON
       );
       if (response.statusCode == 200) {
-        data = jsonDecode(response.body);
+        data1 = jsonDecode(response.body);
         print("===================================>");
-        print(data);
+        print(data1);
         // Yêu cầu thành công
         print('Dữ liệu phản hồi: ${response.body}');
       } else {

@@ -6,6 +6,7 @@ import 'package:waterapp/screens/create_account/create_account.dart';
 import 'package:waterapp/screens/home_screen/home_screen.dart';
 import '../../services/active_otp_services.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import '../create_account/auth_manager.dart';
 import '../shared/dialog_utils.dart';
 import 'package:uuid/uuid.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -104,13 +105,11 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
       await context.read<PinCodeFieldsManager>().getOtpRes(_otp);
       var code = context.read<PinCodeFieldsManager>();
       await context
-          .read<PinCodeFieldsManager>()
+          .read<AuthManager>()
           .getToken(widget.data['phone'], code.password, _deviceInfo);
-      var token = context.read<PinCodeFieldsManager>();
-      print("token cua nguoi dung la: ");
-      print(token.access_token);
-      await ActiveOTPServices().updateDeviceToken(token.access_token, _deviceToken);
-
+      // var token = context.read<PinCodeFieldsManager>();
+      // print("token cua nguoi dung la: ");
+      // await ActiveOTPServices().updateDeviceToken(token.access_token, _deviceToken);
     } catch (error) {
       showErrorDialog(context, error.toString());
     }
@@ -281,26 +280,27 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
                             phone: widget.data['phone']!, code: value2);
                         await _submit();
                         // print(_deviceToken);
-                        if (widget.data['method']! == 'signin') {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) => HomeScreen(),
-                            ),
-                          );
-                          // Navigator.pushAndRemoveUntil(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => HomeScreen()),
-                          //   (Route<dynamic> route) =>
-                          //       false, // Xóa tất cả các trang cũ
-                          // );
-                        } else {
+                        if (widget.data['method']! == 'signup') {
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder: (context) => CreateAccount(),
                             ),
                           );
+                          //   Navigator.of(context).pushReplacement(
+                          //     MaterialPageRoute(
+                          //       builder: (context) => MyHomePage(),
+                          //     ),
+                          //   );
+                          //   // Navigator.pushAndRemoveUntil(
+                          //   //   context,
+                          //   //   MaterialPageRoute(
+                          //   //       builder: (context) => HomeScreen()),
+                          //   //   (Route<dynamic> route) =>
+                          //   //       false, // Xóa tất cả các trang cũ
+                          //   // );
                         }
+
+                        // }
                       },
                       child: Text(
                         'XÁC THỰC OTP',

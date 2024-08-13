@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 
-class AuthToken with ChangeNotifier {
+class AuthToken1{
   final int id_user;
   final String username;
   final String access_token;
   final String full_name;
   final String email;
 
-  AuthToken({
+  AuthToken1({
     required this.id_user,
     required this.username,
     required this.access_token,
@@ -23,14 +23,13 @@ class AuthToken with ChangeNotifier {
   String get userId {
     return userId;
   }
-  AuthToken copyWith({
-    int? id_user,
-    String? username,
-    String? access_token,
-    String? full_name,
-    String? email,
+
+  AuthToken1 copyWith({
+    String? password,
+    bool? success,
+    String? error,
   }) {
-    return AuthToken(
+    return AuthToken1(
       id_user: id_user ?? this.id_user,
       username: username ?? this.username,
       access_token: access_token ?? this.access_token,
@@ -48,8 +47,8 @@ class AuthToken with ChangeNotifier {
       'email': email,
     };
   }
-  factory AuthToken.fromJson(Map<String, dynamic> json) {
-    return AuthToken(
+  factory AuthToken1.fromJson(Map<String, dynamic> json) {
+    return AuthToken1(
       id_user: json['id_user'],
       username: json['username'],
       access_token: json['access_token'],

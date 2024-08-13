@@ -5,7 +5,7 @@ import '../../services/active_otp_services.dart';
 class PinCodeFieldsManager with ChangeNotifier{
   final ActiveOTPServices _activeOTPServices = ActiveOTPServices();
   Map<String, dynamic> _otpRes = {};
-  Map<String, dynamic> _tokenUser = {};
+  // Map<String, dynamic> _tokenUser = {};
 
   Future<void> getOtpRes(otp) async{
     _otpRes = await _activeOTPServices.activeOtp(otp);
@@ -19,12 +19,7 @@ class PinCodeFieldsManager with ChangeNotifier{
   }
 
     Future<void> getToken(phone, password, _deviceInfo) async{
-    _tokenUser = await _activeOTPServices.getToken(phone, password, _deviceInfo);
-    print("TOKEN: ");
-    print(_tokenUser);
+     await _activeOTPServices.getToken(phone, password, _deviceInfo);
     notifyListeners();
-  }
-    String get access_token{
-    return _tokenUser['access_token'].toString();
   }
 }
